@@ -102,9 +102,9 @@ class search_packages:
         data = []
         for i in range(0, len(lines)):
             for j in range(0, len(lines[i])):
-                if "Author" in str(lines[i][j]):
+                if "Author: " in str(lines[i][j]):
                     data.append(lines[i][j])
-                if "Requires" in str(lines[i][j]):
+                if "Requires: " in str(lines[i][j]):
                     data.append(lines[i][j])
         
         #Fields are repeated twice
@@ -116,12 +116,12 @@ class search_packages:
             values.append("No Python Specific")
         elif len(lista) == 1:
             #Only has Author
-            if "Author" in str(lista[0]):
+            if "Author: " in str(lista[0]):
                 var = lista[0].split("Author: ")[1]
                 values.append(var)
                 values.append("No Python Specific")
             #Only has Requires
-            elif "Requires" in str(lista[0]):
+            elif "Requires: " in str(lista[0]):
                 values.append("No Author")
                 var = lista[0].split("Requires: ")[1]
                 #replace < or >
@@ -132,10 +132,10 @@ class search_packages:
         elif len(lista) == 2:
             #Contains both
             for i in range(0,2):
-                if "Author" in lista[i]:
+                if "Author: " in lista[i]:
                     author = lista[i].split("Author: ")[1]
                     values.append(author)
-                elif "Requires" in lista[i]:
+                elif "Requires: " in lista[i]:
                     requires = lista[i].split("Requires: ")[1]
                     #replace < or >
                     if ">" or "<" in requires:

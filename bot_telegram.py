@@ -113,8 +113,8 @@ class bot_telegram:
         user_id = update.effective_user['id']
          
         self.package_raw = update.message.text
-        self.package = self.package_raw if not ' ' in self.package_raw else self.package_raw.replace(' ', '+')
-         
+        pck = self.package_raw.replace("\n", " ")
+        self.package = pck if not ' ' in pck else pck.replace(' ', '+')
         self.logger.info(f"El usuario {username}/{user_id}, ha introducido una búsqueda...")
         #Typing 
         update.message.chat.send_action(action=ChatAction.TYPING,timeout=None) 
