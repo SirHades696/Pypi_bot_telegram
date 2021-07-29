@@ -170,7 +170,7 @@ class bot_telegram:
                     
                 txt = ( f"<b>{self.lang['data_package']['results']} {str(i+1)}</b> {self._emojis['index']}"
                         f"\n<b>{self.lang['data_package']['page']}<u><i>{self.page}</i></u></b>"
-                        f"\n<b>{self.lang['data_package']['package']}</b> <i><u>{values[result]['Project_name']}</u></i>1"
+                        f"\n<b>{self.lang['data_package']['package']}</b> <i><u>{values[result]['Project_name']}</u></i>"
                         f"\n<b>{self.lang['data_package']['version']}</b><i>{values[result]['Version']}</i>"
                         f"\n<b>{self.lang['data_package']['released']}</b><i>{values[result]['Released']}</i>"
                         f"\n<b>{self.lang['data_package']['summary']}</b><i>{summary}</i>"
