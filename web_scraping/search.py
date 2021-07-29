@@ -61,7 +61,7 @@ class search_packages:
                 if html2.find("span", {"id": "pip-command"}):
                     pip_install = html2.find("span", {"id": "pip-command"}).getText()
                 else:
-                    pip_install = "No pip"
+                    pip_install = "No PIP"
                 
                 #Contains all downloads
                 downloads = html2.find_all("th", {"scope": "row"})

@@ -261,11 +261,17 @@ class bot_telegram:
                 else:
                     homepage = values[result]['Homepage']
                     
+                if "No PIP" in values[result]['PIP']:
+                    pip = translator.translate(values[result]['PIP'], dest='es').text
+                else:
+                    pip = values[result]['PIP']
+                    
             else: 
                 summary = values[result]['Summary']
                 homepage = values[result]['Homepage']
                 requires = values[result]['Requires']
                 author = values[result]['Author']
+                pip = values[result]['PIP']
                 
             txt = (
                     f"<b>{self.lang['data_package']['results']} {str(i+1)}</b> {self._emojis['index']}"
@@ -277,7 +283,7 @@ class bot_telegram:
                     f"\n<b>{self.lang['data_package']['pypi_link']}</b><i>{values[result]['PyPi_link']}</i>"
                     f"\n<b>{self.lang['data_package']['author']}</b><i>{author}</i>"
                     f"\n<b>{self.lang['data_package']['requires']}</b><i>{requires}</i>"
-                    f"\n<b>{self.lang['data_package']['pip']}</b><i><u>{values[result]['PIP']}</u></i>"
+                    f"\n<b>{self.lang['data_package']['pip']}</b><i><u>{pip}</u></i>"
                     f"\n<b>{self.lang['data_package']['homepage']}</b><i>{homepage}</i>")
             #Typing 
             update.message.chat.send_action(action=ChatAction.TYPING,timeout=None)       
