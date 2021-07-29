@@ -9,7 +9,7 @@ import logging
 import os
 import sys
 #for web scrapping
-from web_scrapping.search import search_packages
+from web_scraping.search import search_packages
 #Languages
 import lang.data_spa as data_spa
 import lang.data_en as data_en
