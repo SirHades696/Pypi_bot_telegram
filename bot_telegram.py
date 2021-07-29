@@ -516,31 +516,6 @@ class bot_telegram:
         self.logger.info(f"El usuario {username}/{user_id}, solicito ayuda...")
         return self._state_one
     
-    def _mode(self, updater):
-        """
-        Selecting mode to start bot
-        """
-        if self._mod == "dev":
-            #get request from telegram 
-            updater.start_polling()
-            print("::::::::::::::::::::::::::::::::::::Starting BOT::::::::::::::::::::::::::::::::::::::")
-            #close with CTRL + C
-            updater.idle()
-            
-        elif self._mod == "prod": 
-            _HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-            PORT = int(os.environ.get("PORT", "8443"))
-            
-            updater.start_webhook(
-                listen="0.0.0.0",
-                port = PORT, 
-                url_path = self._TOKEN
-            )
-            updater.bot.set_webhook(f"https://{_HEROKU_APP_NAME}.herokuapp.com/{self._TOKEN}")
-        else:
-            self.logger.info("No se especificó ningún modo de trabajo")
-            sys.exit()
-            
     def _start_bot(self):
         """
         Start telegram bot
@@ -635,7 +610,28 @@ class bot_telegram:
         #Switch events 
         dp.add_handler(conv_handler)
         #start mode
-        self._mode(updater)
+        if self._mod == "dev":
+            #get request from telegram 
+            updater.start_polling()
+            print("::::::::::::::::::::::::::::::::::::Starting BOT::::::::::::::::::::::::::::::::::::::")
+            #close with CTRL + C
+            updater.idle()
+            
+        elif self._mod == "prod": 
+            _HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
+            PORT = int(os.environ.get('PORT', '8443'))
+            
+            updater.start_webhook(
+                listen="0.0.0.0",
+                port = PORT, 
+                url_path = self._TOKEN,
+                webhook_url=f"https://{_HEROKU_APP_NAME}.herokuapp.com/{self._TOKEN}"
+            )
+            print("::::::::::::::::::::::::::::::::::::Starting BOT::::::::::::::::::::::::::::::::::::::")
+            updater.idle()
+        else:
+            self.logger.info("No se especificó ningún modo de trabajo")
+            sys.exit()
 
 if __name__ == "__main__":
     """
