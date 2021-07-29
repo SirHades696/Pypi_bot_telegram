@@ -11,28 +11,36 @@ All Python packages used in this bot are in the file:
 ## How to install all Python packages? 
 > `pip install [package] or [package]==[version]` 
 # UI and Messages
-The first message send to user has information about of bot 
-![alt text](img/start.jpg "Simple Bot for search and find python packages")
+The first message send to user has information about of bot
+
+<img src="img/start.jpg" width="40%" height="40%">
 
 When the user presses start these options are displayed, choose a language. 
-![alter text](img/select_lang.jpg "Simple Bot for search and find python packages")
+
+<img src="img/select_lang.jpg" width="40%" height="40%">
 
 Depends on the option selected, displays the welcome message.
-![alter text](img/welcome_mesage.jpg)
+
+<img src="img/welcome_mesage.jpg" width="40%" height="40%">
 
 For search package select "Search Package or Buscar Package" and typing the PP.
 This screen displays the first page of pypi results.
-![alter text](img/search_page1.jpg "Simple Bot for search and find python packages")
+
+<img src="img/search_page1.jpg" width="40%" height="40%">
 
 If selected "More results or Más resultados", will display the results for second page.
-![alter text](img/search_page2.jpg "Simple Bot for search and find python packages")
-![alter text](img/results_page2.jpg "Simple Bot for search and find python packages")
+
+<img src="img/search_page2.jpg" width="40%" height="40%">
+
+<img src="img/results_page2.jpg" width="40%" height="40%">
 
 If you need change lang, select "Change lang and Restart or Cambiar idioma y reiniciar"
-![alter text](img/change_lang_options.jpg "Simple Bot for search and find python packages")
+
+<img src="img/change_lang_options.jpg" width="40%" height="40%">
 
 If you need restart bot, typing /start command or select this option in the menu.
-![alter text](img/start_command.jpg "Simple Bot for search and find python packages")
+
+<img src="img/start_command.jpg" width="40%" height="40%">
 
 # Resources
 
