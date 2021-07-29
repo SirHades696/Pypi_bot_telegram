@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+__author__ = "SirHades696"
+__email__ = "djnonasrm@gmail.com"
+
+emojis =   {'python':u'\U0001F40D',
+            'smile':u'\U0001F601',
+            'smile2':u'\U0001F60A',
+            'robot': u'\U0001F916',
+            'robot2': u'\U0001F47E',
+            'alien': u'\U0001F47D',
+            'trex': u'\U0001F996',
+            'hand': u'\U0001F44B',
+            'paper': u'\U0001F4D1',
+            'check': u'\U00002705',
+            'fire': u'\U0001F525',
+            'magnifying_glass': u'\U0001F50D',
+            'monocle': u'\U0001F9D0',
+            'index': u'\U0000261D',
+            'sad': u'\U0001F625',
+            'cross_mark': u'\U0000274C',
+            'mexa': u'\U0001F1F2' + u'\U0001F1FD',
+            'usa': u'\U0001F1FA' + u'\U0001F1F8',
+            'down-right': u'\U00002198',
+            'down-left' : u'\U00002199',
+            'home': u'\U0001F3E0',
+            'help': u'\U0001F913',
+            'stop': u'\U0001F6D1',
+            'plus': u'\U00002795',
+            'new': u'\U0001F195',
+            'thinking': u'\U0001F914',
+            #Stickers
+            'bot': "CAACAgIAAxkBAAECn9Vg-7ElGtv2sBUDrCnEIRkG1vHMgwAC0wADVp29CvUyj5fVEvk9IAQ",
+            'finish_him': "CAACAgIAAxkBAAEColZg_cu9t_VUMXPcORlcuVoBgutzGAACYQADrWW8FBxb9mx8ClnpIAQ",
+            'help_s': "CAACAgIAAxkBAAEColpg_c4uhsWy2lC-16yzTbasSufQswACEgADO2AkFBf2ezO6T5XEIAQ",
+            'stop_no': "CAACAgIAAxkBAAECos5g_ej2GvQsBhhwF9uPetxX7WLPjAACRQADrWW8FJh7rCGbUyYwIAQ",
+            'stop_yes': "CAACAgIAAxkBAAECotBg_elQPw6KfBfDzOHBvaYwpqzw6gAC0QADMNSdEfxR6nTYGt87IAQ"}

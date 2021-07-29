@@ -112,3 +112,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Visual code
+.vscode/
+test.py
+test2.py
+bot_telegram_copy.py
