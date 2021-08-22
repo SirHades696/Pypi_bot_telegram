@@ -2,7 +2,7 @@
 __author__ = "SirHades696"
 __email__ = "djnonasrm@gmail.com"
 
-from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters,  PicklePersistence
 from telegram import ChatAction, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import telegram
 import logging
@@ -93,13 +93,15 @@ class bot_telegram:
         Returns:
             [int]: return state two
         """
+        self._check_lang(update, context)
+        
         username = update.effective_user['username']
         user_id = update.effective_user['id'] 
         self.logger.info(f"El usuario {username}/{user_id}, ha creado una solicitud de búsqueda...")
         #Typing 
         update.message.chat.send_action(action=ChatAction.TYPING,timeout=None) 
         cadena = f"<b>{self.lang['search_package']}</b>{self._emojis['magnifying_glass']}{self._emojis['magnifying_glass']}"
-        context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=cadena)
+        context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=cadena, reply_markup=ReplyKeyboardRemove())
         
         return self._state_two
     
@@ -109,11 +111,15 @@ class bot_telegram:
         Returns:
             [int]: Return state three 
         """
+        self._check_lang(update, context)
         username = update.effective_user['username']
         user_id = update.effective_user['id']
          
         self.package_raw = update.message.text
         pck = self.package_raw.replace("\n", " ")
+        
+        context.user_data['package'] = pck
+        
         self.package = pck if not ' ' in pck else pck.replace(' ', '+')
         self.logger.info(f"El usuario {username}/{user_id}, ha introducido una búsqueda...")
         #Typing 
@@ -123,6 +129,9 @@ class bot_telegram:
         #start o restart in 1 
         page = 0
         self.page = page + 1
+        
+        context.user_data['page'] = self.page
+        
         #Web scrapping
         search = search_packages(self.package, page=self.page)
         values = search.get_values()
@@ -144,7 +153,7 @@ class bot_telegram:
                     context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=cadena2) 
                 
                 # Translate for spanish 
-                if self.lang_var == "SPA":
+                if self.lang == "SPA":
                     summary = translator.translate(str(values[result]['Summary']), dest='es').text
                     
                     if "Author" in values[result]['Author']:
@@ -206,15 +215,22 @@ class bot_telegram:
         
         return self._state_three
 
+    def _package_page(self, update, context):
+        if "package" in context.user_data:
+            self.package = context.user_data.get('package')
+            self.page = context.user_data.get('page')
+    
     def _search_more_results(self, update, context):
         """Display more results for the search
 
         Returns:
             [int]: Return state three
         """
+        self._package_page(update, context)
+        self._check_lang(update, context)
         #Auto incremental for more results 
         self.page = self.page + 1
-
+        context.user_data['page'] = self.page
         username = update.effective_user['username']
         user_id = update.effective_user['id']
         
@@ -223,7 +239,7 @@ class bot_telegram:
         #Typing 
         update.message.chat.send_action(action=ChatAction.TYPING,timeout=None)  
         text_more = f"<b>{self._emojis['magnifying_glass']}{self.lang['more_results']}<i><u>{self.page}</u></i>{self._emojis['paper']}</b>"     
-        context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=text_more) 
+        context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=text_more, reply_markup=ReplyKeyboardRemove()) 
         
         #Web scrapping
         search = search_packages(self.package, page=self.page)
@@ -243,7 +259,7 @@ class bot_telegram:
                             
                 context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=cadena2) 
             # Translate for spanish 
-            if self.lang_var == "SPA":
+            if self.lang == "SPA":
                 summary = translator.translate(str(values[result]['Summary']), dest='es').text
                 
                 if "Author" in values[result]['Author']:
@@ -287,7 +303,7 @@ class bot_telegram:
                     f"\n<b>{self.lang['data_package']['homepage']}</b><i>{homepage}</i>")
             #Typing 
             update.message.chat.send_action(action=ChatAction.TYPING,timeout=None)       
-            context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=txt)
+            context.bot.sendMessage(chat_id=user_id, parse_mode="HTML", text=txt,reply_markup=ReplyKeyboardRemove())
             #last value 
             if i+1 == tam:
                 #Typing 
@@ -307,6 +323,7 @@ class bot_telegram:
         Returns:
             [int]: return state one
         """
+        self._check_lang(update, context)
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
         s = pyshorteners.Shortener()
@@ -406,11 +423,13 @@ class bot_telegram:
         text = update.message.text
         #Checking words in text from user 
         if "Spanish" in text or "Change" in text:
-            self.lang_var = "SPA"
+            self.lang = "SPA"
+            context.user_data['LANG'] = "SPA"
         elif "English" in text or "Cambiar" in text:
-            self.lang_var = "EN"
+            self.lang = "EN"
+            context.user_data['LANG'] = "EN"
         #set lang
-        self.lang = self._set_lang(self.lang_var)
+        self.lang = self._set_lang(self.lang)
         user = self._name_welcome(update,context)
         #Typing 
         update.message.chat.send_action(action=ChatAction.TYPING,timeout=None) 
@@ -428,7 +447,6 @@ class bot_telegram:
         """
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
-        
         context.bot.send_sticker(chat_id=user_id, 
                                 sticker = self._emojis['bot'],
                                 reply_markup=self._btns_lang_menu())
@@ -443,6 +461,7 @@ class bot_telegram:
         Returns:
             [int]: return state four
         """
+        self._check_lang(update, context)
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
         self.logger.info(f"El usuario {username}/{user_id}, confirmará si termina el bot...")
@@ -467,6 +486,7 @@ class bot_telegram:
         Returns:
             [Object]: End bot
         """
+        self._check_lang(update, context)
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
         #Typing 
@@ -476,7 +496,7 @@ class bot_telegram:
                                 sticker = self._emojis['stop_yes'],
                                 reply_markup=ReplyKeyboardRemove())
         self.logger.info(f"El usuario {username}/{user_id}, ha terminado el bot ...")
-        
+        del context.user_data['LANG'], context.user_data['package'], context.user_data['page']
         return ConversationHandler.END
              
     def _stop_no_message(self, update, context):
@@ -485,6 +505,7 @@ class bot_telegram:
         Returns:
             [int]: Return the state one of the bot 
         """
+        self._check_lang(update, context)
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
         #Typing 
@@ -503,6 +524,7 @@ class bot_telegram:
         Returns:
             [int]: Return the state one of the bot 
         """
+        self._check_lang(update, context)
         user_id = update.effective_user['id'] 
         username = update.effective_user['username']
         
@@ -522,15 +544,21 @@ class bot_telegram:
         self.logger.info(f"El usuario {username}/{user_id}, solicito ayuda...")
         return self._state_one
     
+    def _check_lang(self, update, context):
+        if 'LANG' in context.user_data:
+            lang = context.user_data.get('LANG')
+            self.lang = self._set_lang(lang)
+    
     def _start_bot(self):
         """
         Start telegram bot
         Start updater, dispatcher and handlers
         """
+        persistence = PicklePersistence(filename='telegrambot.pickle')
         #get data bot  
         bot_pypi = telegram.Bot(token = self._TOKEN)
         #link between updater and bot 
-        updater = Updater(bot_pypi.token, use_context=True)
+        updater = Updater(bot_pypi.token,  persistence=persistence)
         # dispatcher 
         dp = updater.dispatcher
         #Conversition handler and states
@@ -611,7 +639,9 @@ class bot_telegram:
                     ]
                 
                     },
-            fallbacks = [CommandHandler("start", self._start_select_lang)]
+            fallbacks = [CommandHandler("start", self._start_select_lang)],
+            name="my_conversation",
+            persistent=True
         )
         #Switch events 
         dp.add_handler(conv_handler)

@@ -118,3 +118,4 @@ dmypy.json
 test.py
 test2.py
 bot_telegram_copy.py
+telegrambot.pickle
